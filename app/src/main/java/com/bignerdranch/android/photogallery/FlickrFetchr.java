@@ -61,6 +61,7 @@ public class FlickrFetchr {
                     .appendQueryParameter("method", "flickr.photos.getRecent")
                     .appendQueryParameter("api_key", API_KEY)
                     .appendQueryParameter("format", "json")
+                    .appendQueryParameter("nojsoncallback","1")
                     .appendQueryParameter("extras", "url_s")
                     .build().toString();
             String jsonString = getUrlString(url);
