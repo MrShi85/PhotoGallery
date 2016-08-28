@@ -6,7 +6,7 @@ package com.bignerdranch.android.photogallery;
 public class GalleryItem {
     private String mCaption;
     private String mId;
-    private String mCUrl;
+    private String mUrl;
 
     @Override
     public String toString() {
@@ -29,11 +29,11 @@ public class GalleryItem {
         mId = id;
     }
 
-    public String getCUrl() {
-        return mCUrl;
+    public String getUrl() {
+        return mUrl;
     }
 
-    public void setCUrl(String CUrl) {
-        mCUrl = CUrl;
+    public void setUrl(String CUrl) {
+        mUrl = CUrl;
     }
 }

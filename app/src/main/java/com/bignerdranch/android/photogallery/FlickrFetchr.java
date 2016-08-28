@@ -95,7 +95,7 @@ public class FlickrFetchr {
                 continue;
             }
 
-            item.setCUrl(photoJsonObject.getString("url_s"));
+            item.setUrl(photoJsonObject.getString("url_s"));
             items.add(item);
         }
     }
