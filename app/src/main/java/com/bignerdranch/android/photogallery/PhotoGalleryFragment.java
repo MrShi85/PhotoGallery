@@ -40,7 +40,7 @@ public class PhotoGalleryFragment extends Fragment {
 
         Handler responseHandler = new Handler();
         mThumbnailDownloader = new ThumbnailDownloader<>(responseHandler);
-        mThumbnailDownloader.setmThumbnailDownloadListener(
+        mThumbnailDownloader.setThumbnailDownloadListener(
                 new ThumbnailDownloader.ThumbnailDownloadListener<PhotoHolder>(){
                     @Override
                     public void onThumbnailDownloaded(PhotoHolder photoHolder, Bitmap bitmap) {
@@ -70,6 +70,12 @@ public class PhotoGalleryFragment extends Fragment {
 
         setupAdapter();
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mThumbnailDownloader.clearQueue();
     }
 
     private void setupAdapter(){
