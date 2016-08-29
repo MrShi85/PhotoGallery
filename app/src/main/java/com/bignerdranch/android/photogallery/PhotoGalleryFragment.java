@@ -40,7 +40,7 @@ public class PhotoGalleryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new FetchItemsTask().execute();
+        updateItems();
         setHasOptionsMenu(true);
 
         Handler responseHandler = new Handler();
@@ -94,6 +94,7 @@ public class PhotoGalleryFragment extends Fragment {
                                                @Override
                                                public boolean onQueryTextSubmit(String s) {
                                                    Log.d(TAG, "QueryTextSubmit: " + s);
+                                                   QueryPreferences.setStoredQuery(getActivity(), s);
                                                    updateItems();
                                                    return true;
                                                }
@@ -105,10 +106,32 @@ public class PhotoGalleryFragment extends Fragment {
                                                }
                                            }
         );
+
+        searchView.setOnSearchClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String query = QueryPreferences.getStoredQuery(getActivity());
+                searchView.setQuery(query,false);
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_clear:
+                QueryPreferences.setStoredQuery(getActivity(), null);
+                updateItems();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     private void updateItems(){
-        new FetchItemsTask().execute();
+        String query = QueryPreferences.getStoredQuery(getActivity());
+        new FetchItemsTask(query).execute();
     }
 
     private void setupAdapter(){
@@ -161,14 +184,19 @@ public class PhotoGalleryFragment extends Fragment {
     }
 
     private class FetchItemsTask extends AsyncTask<Void,Void,List<GalleryItem>>{
+
+        private String mQuery;
+
+        public FetchItemsTask(String query){
+            mQuery = query;
+        }
+
         @Override
         protected List<GalleryItem> doInBackground(Void... params) {
-            String query = "dog";
-
-            if(query==null){
+            if(mQuery==null){
                 return new FlickrFetchr().fetchRecentPhotos();
             }else{
-                return new FlickrFetchr().searchPhotos(query);
+                return new FlickrFetchr().searchPhotos(mQuery);
             }
 
         }
